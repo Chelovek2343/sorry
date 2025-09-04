@@ -99,29 +99,76 @@
     body.dark .card {
       background: rgba(30,41,59,0.8);
     }
+
+    /* Галерея */
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 15px;
     }
-    .gallery img {
+    .gallery img,
+    .gallery video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 12px;
-      transition: transform 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.3s, opacity 0.5s;
+      opacity: 0;
     }
-    .gallery img:hover { transform: scale(1.05); }
-    form {
-      display: grid;
-      gap: 10px;
+    .gallery img:hover,
+    .gallery video:hover { transform: scale(1.05); }
+    .gallery img.loaded,
+    .gallery video.loaded { opacity: 1; }
+
+    /* Песня */
+    #song {
+      text-align: center;
     }
-    form input, form textarea {
+    .song-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff0f6, #ffe4e6);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      max-width: 500px;
+      margin: auto;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    body.dark .song-card {
+      background: linear-gradient(135deg, #1e293b, #334155);
+    }
+    .song-card .cover {
+      width: 180px;
+      height: 180px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      transition: transform 0.4s ease;
+    }
+    .song-card .cover:hover {
+      transform: rotate(-3deg) scale(1.05);
+    }
+    .song-info h3 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    .song-info p {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+    .song-info audio {
       width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     footer {
       border-top: 1px solid rgba(255,255,255,0.3);
       text-align: center;
@@ -161,23 +208,44 @@
     <p id="anniversaryDate" style="text-align:center; margin-top:10px;"></p>
   </section>
 
+  <!-- Галерея -->
   <section id="gallery">
     <h2>Наши моменты</h2>
     <div class="gallery">
-      <img src="j4.jpg" alt="">
-      <img src="j5.jpg" alt="">
-      <img src="WhatsApp Image 2025-09-03 at 06.06.42_6debc95a.jpg" alt="">
-      <img src="WhatsApp Image 2025-09-03 at 06.09.54_ca56caf0.jpg" alt="">
-      <video src="v2.mp4" controls></video>
-      <video src="v3.mp4" controls></video>
-      <video src="v4.mp4" controls></video>
-      <video src="WhatsApp Video 2025-09-03 at 06.06.33_79d96738.mp4" controls></video>
+      <img src="j4.jpg" alt="" loading="lazy">
+      <img src="j5.jpg" alt="" loading="lazy">
+      <img src="WhatsApp Image 2025-09-03 at 06.06.42_6debc95a.jpg" alt="" loading="lazy">
+      <img src="WhatsApp Image 2025-09-03 at 06.09.54_ca56caf0.jpg" alt="" loading="lazy">
+
+      <video class="lazy-video" controls preload="none" poster="3.jpg">
+        <source data-src="v2.mp4" type="video/mp4">
+      </video>
+      <video class="lazy-video" controls preload="none" poster="3.jpg">
+        <source data-src="v3.mp4" type="video/mp4">
+      </video>
+      <video class="lazy-video" controls preload="none" poster="3.jpg">
+        <source data-src="v4.mp4" type="video/mp4">
+      </video>
+      <video class="lazy-video" controls preload="none" poster="3.jpg">
+        <source data-src="WhatsApp Video 2025-09-03 at 06.06.33_79d96738.mp4" type="video/mp4">
+      </video>
     </div>
   </section>
 
-  <section id="contact">
-    <p>Песня</p>
-    <audio src="песня.mp3" controls></audio>
+  <!-- Песня -->
+  <section id="song">
+    <h2>Наша песня</h2>
+    <div class="song-card">
+      <img class="cover" src="3.jpg" alt="Обложка">
+      <div class="song-info">
+        <h3>Наша песня</h3>
+        <p>Арафат & Асылгуль</p>
+        <audio controls>
+          <source src="песня.mp3" type="audio/mpeg">
+          Ваш браузер не поддерживает аудио.
+        </audio>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -225,14 +293,35 @@
       document.body.classList.toggle("dark");
     };
 
-    document.getElementById("contactForm").onsubmit = (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const name = fd.get("name");
-      const msg = fd.get("message");
-      window.location.href =
-        `mailto:hello@our-love.site?subject=Сообщение от ${encodeURIComponent(name)}&body=${encodeURIComponent(msg)}`;
-    };
+    // Ленивая загрузка видео
+    document.addEventListener("DOMContentLoaded", () => {
+      const videos = document.querySelectorAll("video.lazy-video");
+
+      const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const video = entry.target;
+            const source = video.querySelector("source");
+
+            if (source && source.dataset.src) {
+              source.src = source.dataset.src;
+              video.load();
+            }
+            video.classList.add("loaded");
+            observer.unobserve(video);
+          }
+        });
+      }, { threshold: 0.25 });
+
+      videos.forEach(video => {
+        videoObserver.observe(video);
+      });
+
+      // картинки fade-in
+      document.querySelectorAll(".gallery img").forEach(img => {
+        img.addEventListener("load", () => img.classList.add("loaded"));
+      });
+    });
   </script>
 </body>
 </html>
