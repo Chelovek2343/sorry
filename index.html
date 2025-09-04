@@ -1,327 +1,470 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Арафат ❤ Асылгуль</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    :root {
-      --bg-light: linear-gradient(to bottom, #fff0f6, #fff5f5);
-      --bg-dark: linear-gradient(to bottom, #0f172a, #020617);
-      --text-light: #1e293b;
-      --text-dark: #f1f5f9;
-    }
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: var(--bg-light);
-      color: var(--text-light);
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-    header {
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-    }
-    header .title {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    button {
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: white;
-      cursor: pointer;
-    }
-    body.dark button {
-      background: #1e293b;
-      border-color: #334155;
-      color: white;
-    }
-    section {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-    .hero {
-      display: grid;
-      gap: 20px;
-    }
-    @media (min-width: 768px) {
-      .hero { grid-template-columns: 1fr 1fr; align-items: center; }
-    }
-    .hero img {
-      width: 100%;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-    .timer {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
-      gap: 10px;
-      text-align: center;
-    }
-    .timer div {
-      padding: 15px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.7);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    body.dark .timer div {
-      background: rgba(30,41,59,0.7);
-    }
-    .cards {
-      display: grid;
-      gap: 15px;
-    }
-    @media (min-width: 768px) {
-      .cards { grid-template-columns: repeat(3, 1fr); }
-    }
-    .card {
-      padding: 15px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    body.dark .card {
-      background: rgba(30,41,59,0.8);
-    }
+    <meta charset="UTF-8">
+    <title>Арафат ❤ Асылгуль</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg-light: linear-gradient(to bottom, #fff0f6, #fff5f5);
+            --bg-dark: linear-gradient(to bottom, #0f172a, #020617);
+            --text-light: #1e293b;
+            --text-dark: #f1f5f9;
+        }
 
-    /* Галерея */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-      gap: 15px;
-    }
-    .gallery img,
-    .gallery video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: transform 0.3s, opacity 0.5s;
-      opacity: 0;
-    }
-    .gallery img:hover,
-    .gallery video:hover { transform: scale(1.05); }
-    .gallery img.loaded,
-    .gallery video.loaded { opacity: 1; }
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: background 0.3s, color 0.3s;
+        }
 
-    /* Песня */
-    #song {
-      text-align: center;
-    }
-    .song-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #fff0f6, #ffe4e6);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      max-width: 500px;
-      margin: auto;
-      animation: fadeIn 1.2s ease-in-out;
-    }
-    body.dark .song-card {
-      background: linear-gradient(135deg, #1e293b, #334155);
-    }
-    .song-card .cover {
-      width: 180px;
-      height: 180px;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-      transition: transform 0.4s ease;
-    }
-    .song-card .cover:hover {
-      transform: rotate(-3deg) scale(1.05);
-    }
-    .song-info h3 {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    .song-info p {
-      margin: 0 0 10px;
-      font-size: 1rem;
-      opacity: 0.8;
-    }
-    .song-info audio {
-      width: 100%;
-    }
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        header {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
 
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.3);
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="title">❤ Арафат & Асылгуль</div>
-    <div>
-      <button onclick="window.print()">Сохранить PDF</button>
-      <button id="toggleTheme">Тема</button>
-    </div>
-  </header>
+        header .title {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-  <section class="hero">
-    <div>
-      <h1>Арафат ❤ Асылгуль</h1>
-      <p id="sinceText"></p>
-      <a href="#gallery"><button>Фотографии</button></a>
-    </div>
-    <div>
-      <img src="3.jpg" alt="couple">
-    </div>
-  </section>
+        button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+        }
 
-  <section>
-    <h2>До следующей годовщины</h2>
-    <div class="timer">
-      <div><div id="days">00</div><small>Дней</small></div>
-      <div><div id="hours">00</div><small>Часов</small></div>
-      <div><div id="minutes">00</div><small>Минут</small></div>
-      <div><div id="seconds">00</div><small>Секунд</small></div>
-    </div>
-    <p id="anniversaryDate" style="text-align:center; margin-top:10px;"></p>
-  </section>
+        body.dark button {
+            background: #1e293b;
+            border-color: #334155;
+            color: white;
+        }
 
-  <!-- Галерея -->
-  <section id="gallery">
-    <h2>Наши моменты</h2>
-    <div class="gallery">
-      <img src="j4.jpg" alt="" loading="lazy">
-      <img src="j5.jpg" alt="" loading="lazy">
-      <img src="WhatsApp Image 2025-09-03 at 06.06.42_6debc95a.jpg" alt="" loading="lazy">
-      <img src="WhatsApp Image 2025-09-03 at 06.09.54_ca56caf0.jpg" alt="" loading="lazy">
+        section {
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 20px;
+        }
 
-      <video class="lazy-video" controls preload="none" poster="3.jpg">
-        <source data-src="v2.mp4" type="video/mp4">
-      </video>
-      <video class="lazy-video" controls preload="none" poster="3.jpg">
-        <source data-src="v3.mp4" type="video/mp4">
-      </video>
-      <video class="lazy-video" controls preload="none" poster="3.jpg">
-        <source data-src="v4.mp4" type="video/mp4">
-      </video>
-      <video class="lazy-video" controls preload="none" poster="3.jpg">
-        <source data-src="WhatsApp Video 2025-09-03 at 06.06.33_79d96738.mp4" type="video/mp4">
-      </video>
-    </div>
-  </section>
+        .hero {
+            display: grid;
+            gap: 20px;
+        }
 
-  <!-- Песня -->
-  <section id="song">
-    <h2>Наша песня</h2>
-    <div class="song-card">
-      <img class="cover" src="3.jpg" alt="Обложка">
-      <div class="song-info">
-        <h3>Наша песня</h3>
-        <p>Арафат & Асылгуль</p>
-        <audio controls>
-          <source src="песня.mp3" type="audio/mpeg">
-          Ваш браузер не поддерживает аудио.
-        </audio>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p id="love-quote">«Любовь — это не смотреть друг на друга, а вместе смотреть в одном направлении.» — А. де Сент-Экзюпери</p>
-    <p>© <span id="year"></span> Арафат & Асылгуль</p>
-  </footer>
-
-  <script>
-    const startDate = new Date("2023-06-15T00:00:00");
-    function formatSince() {
-      const now = new Date();
-      const diff = now - startDate;
-      const days = Math.floor(diff / (1000*60*60*24));
-      const years = Math.floor(days/365);
-      const months = Math.floor((days%365)/30);
-      const rest = days - years*365 - months*30;
-      document.getElementById("sinceText").textContent =
-        `Вместе уже ${years} лет, ${months} месяцев и ${rest} дней — это ${days} чудесных дней рядом.`;
-    }
-    formatSince();
-
-    function countdown() {
-      const now = new Date();
-      let next = new Date(startDate);
-      next.setFullYear(now.getFullYear());
-      if (next < now) next.setFullYear(next.getFullYear()+1);
-      const diff = next - now;
-      const total = Math.floor(diff/1000);
-      const d = Math.floor(total/(3600*24));
-      const h = Math.floor((total%(3600*24))/3600);
-      const m = Math.floor((total%3600)/60);
-      const s = total%60;
-      document.getElementById("days").textContent = String(d).padStart(2,"0");
-      document.getElementById("hours").textContent = String(h).padStart(2,"0");
-      document.getElementById("minutes").textContent = String(m).padStart(2,"0");
-      document.getElementById("seconds").textContent = String(s).padStart(2,"0");
-      document.getElementById("anniversaryDate").textContent = "Дата: " + next.toLocaleDateString();
-    }
-    setInterval(countdown,1000);
-    countdown();
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    document.getElementById("toggleTheme").onclick = () => {
-      document.body.classList.toggle("dark");
-    };
-
-    // Ленивая загрузка видео
-    document.addEventListener("DOMContentLoaded", () => {
-      const videos = document.querySelectorAll("video.lazy-video");
-
-      const videoObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const video = entry.target;
-            const source = video.querySelector("source");
-
-            if (source && source.dataset.src) {
-              source.src = source.dataset.src;
-              video.load();
+        @media (min-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
             }
-            video.classList.add("loaded");
-            observer.unobserve(video);
-          }
+        }
+
+        .hero img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            text-align: center;
+        }
+
+        .timer div {
+            padding: 15px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark .timer div {
+            background: rgba(30, 41, 59, 0.7);
+        }
+
+        .cards {
+            display: grid;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark .card {
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        /* Галерея */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery img,
+        .gallery video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, opacity 0.5s;
+            opacity: 0;
+        }
+
+        .gallery img:hover,
+        .gallery video:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery img.loaded,
+        .gallery video.loaded {
+            opacity: 1;
+        }
+
+        /* Песня */
+        #song {
+            text-align: center;
+        }
+
+        .song-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #fff0f6, #ffe4e6);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            margin: auto;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        body.dark .song-card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+        }
+
+        .song-card .cover {
+            width: 180px;
+            height: 180px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .song-card .cover:hover {
+            transform: rotate(-3deg) scale(1.05);
+        }
+
+        .song-info h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .song-info p {
+            margin: 0 0 10px;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .song-info audio {
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="title">❤ Арафат & Асылгуль</div>
+        <div>
+            <button onclick="window.print()">Сохранить PDF</button>
+            <button id="toggleTheme">Тема</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Арафат ❤ Асылгуль</h1>
+            <p id="sinceText"></p>
+            <a href="#gallery"><button>Фотографии</button></a>
+        </div>
+        <div>
+            <img src="3.jpg" alt="couple">
+        </div>
+    </section>
+
+    <section>
+        <h2>До следующей годовщины</h2>
+        <div class="timer">
+            <div>
+                <div id="days">00</div><small>Дней</small>
+            </div>
+            <div>
+                <div id="hours">00</div><small>Часов</small>
+            </div>
+            <div>
+                <div id="minutes">00</div><small>Минут</small>
+            </div>
+            <div>
+                <div id="seconds">00</div><small>Секунд</small>
+            </div>
+        </div>
+        <p id="anniversaryDate" style="text-align:center; margin-top:10px;"></p>
+    </section>
+
+    <!-- Галерея -->
+    <section id="gallery">
+        <h2>Наши моменты</h2>
+        <div class="gallery">
+            <img src="j4.jpg" alt="" loading="lazy">
+            <img src="j5.jpg" alt="" loading="lazy">
+            <img src="WhatsApp Image 2025-09-03 at 06.06.42_6debc95a.jpg" alt="" loading="lazy">
+            <img src="WhatsApp Image 2025-09-03 at 06.09.54_ca56caf0.jpg" alt="" loading="lazy">
+
+            <video class="lazy-video" controls preload="none" poster="3.jpg">
+                <source data-src="v2.mp4" type="video/mp4">
+            </video>
+            <video class="lazy-video" controls preload="none" poster="3.jpg">
+                <source data-src="v3.mp4" type="video/mp4">
+            </video>
+            <video class="lazy-video" controls preload="none" poster="3.jpg">
+                <source data-src="v4.mp4" type="video/mp4">
+            </video>
+            <video class="lazy-video" controls preload="none" poster="3.jpg">
+                <source data-src="WhatsApp Video 2025-09-03 at 06.06.33_79d96738.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
+
+    <!-- Песня -->
+    <section id="song">
+        <h2>Наша песня</h2>
+        <div class="song-card">
+            <img class="cover" src="3.jpg" alt="Обложка">
+            <div class="song-info">
+                <h3>Наша песня</h3>
+                <p>Арафат & Асылгуль</p>
+                <audio controls>
+                    <source src="песня.mp3" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио.
+                </audio>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p id="love-quote">«Любовь — это не смотреть друг на друга, а вместе смотреть в одном направлении.» — А. де
+            Сент-Экзюпери</p>
+        <p>© <span id="year"></span> Арафат & Асылгуль</p>
+    </footer>
+
+    <canvas id="fireworks"></canvas>
+
+    <script>
+        const startDate = new Date("2023-06-15T00:00:00");
+        function formatSince() {
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const years = Math.floor(days / 365);
+            const months = Math.floor((days % 365) / 30);
+            const rest = days - years * 365 - months * 30;
+            document.getElementById("sinceText").textContent =
+                `Вместе уже ${years} лет, ${months} месяцев и ${rest} дней — это ${days} чудесных дней рядом.`;
+        }
+        formatSince();
+
+        function countdown() {
+            const now = new Date();
+            let next = new Date(startDate);
+            next.setFullYear(now.getFullYear());
+            if (next < now) next.setFullYear(next.getFullYear() + 1);
+            const diff = next - now;
+            const total = Math.floor(diff / 1000);
+            const d = Math.floor(total / (3600 * 24));
+            const h = Math.floor((total % (3600 * 24)) / 3600);
+            const m = Math.floor((total % 3600) / 60);
+            const s = total % 60;
+            document.getElementById("days").textContent = String(d).padStart(2, "0");
+            document.getElementById("hours").textContent = String(h).padStart(2, "0");
+            document.getElementById("minutes").textContent = String(m).padStart(2, "0");
+            document.getElementById("seconds").textContent = String(s).padStart(2, "0");
+            document.getElementById("anniversaryDate").textContent = "Дата: " + next.toLocaleDateString();
+        }
+        setInterval(countdown, 1000);
+        countdown();
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        document.getElementById("toggleTheme").onclick = () => {
+            document.body.classList.toggle("dark");
+        };
+
+        // Ленивая загрузка видео
+        document.addEventListener("DOMContentLoaded", () => {
+            const videos = document.querySelectorAll("video.lazy-video");
+
+            const videoObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const video = entry.target;
+                        const source = video.querySelector("source");
+
+                        if (source && source.dataset.src) {
+                            source.src = source.dataset.src;
+                            video.load();
+                        }
+                        video.classList.add("loaded");
+                        observer.unobserve(video);
+                    }
+                });
+            }, { threshold: 0.25 });
+
+            videos.forEach(video => {
+                videoObserver.observe(video);
+            });
+
+            // картинки fade-in
+            document.querySelectorAll(".gallery img").forEach(img => {
+                img.addEventListener("load", () => img.classList.add("loaded"));
+            });
         });
-      }, { threshold: 0.25 });
 
-      videos.forEach(video => {
-        videoObserver.observe(video);
-      });
 
-      // картинки fade-in
-      document.querySelectorAll(".gallery img").forEach(img => {
-        img.addEventListener("load", () => img.classList.add("loaded"));
-      });
-    });
-  </script>
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        canvas.style.position = "fixed";
+        canvas.style.top = 0;
+        canvas.style.left = 0;
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.zIndex = 9999;
+        canvas.style.pointerEvents = "none";
+        resizeCanvas();
+
+        window.addEventListener("resize", resizeCanvas);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor(x, y, color, shape) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.shape = shape;
+                this.size = Math.random() * 4 + 6;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = (Math.random() - 0.5) * 6;
+                this.life = 100;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.fillStyle = this.color;
+                if (this.shape === "heart") {
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size, this.size / 3, 0, this.size);
+                    ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -this.size / 2, 0, 0);
+                    ctx.fill();
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.96;
+                this.life--;
+            }
+        }
+
+        const particles = [];
+        function createFirework(x, y) {
+            const colors = ["#ff4d6d", "#ff6b81", "#ff1a40", "#ff85a2"];
+            for (let i = 0; i < 40; i++) {
+                const shape = Math.random() > 0.5 ? "heart" : "circle";
+                particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)], shape));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.life <= 0 || p.size <= 0.5) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // Запуск фейерверков в случайных местах
+        let fireworksInterval = setInterval(() => {
+            createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.6);
+        }, 500);
+
+        // Убираем салют через 6 секунд
+        setTimeout(() => {
+            clearInterval(fireworksInterval);
+            setTimeout(() => canvas.remove(), 2000);
+        }, 6000);
+
+        animate();
+    </script>
 </body>
+
 </html>
